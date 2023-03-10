@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+<app-go-back></app-go-back>
+<div class="cart-page-container">
+    <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+    <!-- TODO: Proper check for empty cart -->
+    <div class="empty-cart-container" *ngIf="cartTotal===0">
+        <h2>No Items in Cart</h2>
+        <button>
+            <a routerLink="/">
+                <span class="material-icons" title="Go to products">shopping_cart</span>
+                Start Shopping
+            </a>
+        </button>
+    </div>
+    <div class="product-cart-container" *ngIf="!loading">
+        <div class="products-container">
+            <div class="cart-product" *ngFor="let cartProduct of cartProducts">
+                <div class="product-image">
+                    <img src={{cartProduct.image}} alt="product image">
+                </div>
+                <div class="product-details">
+                    <div class="product-title-price">
+                        <div>
+                            <h2 class="product-title">{{cartProduct.name}}</h2>
+                        </div>
+                        <div>
+                            <!-- TODO: Add functionality to edit qty -->
+                            <a routerLink="/products/{{cartProduct.id}}">
+                                <p class="product-qty" title="Edit quantity">Qty: {{getCartProductQty(cartProduct.id)}}
+                                </p>
+                            </a>
+                        </div>
+                        <div>
+                            <p class="product-price">@{{cartProduct.price | currency:"Ksh "}}</p>
+                        </div>
+                    </div>
+                    <div class="product-delete-btn">
+                        <!-- TODO: find cleaner way -->
+                        <button class="delete-btn" type="button"
+                            (click)="deleteCartItem(getProductIdAsCartItemId(cartProduct.id))">
+                            <span class="material-icons" title="Remove from cart">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cart" *ngIf="cartTotal>0">
+            <div class="cart-total-items">
+                <h1>Total For({{cartItems.length}}) items:</h1>
+                <h2>{{cartTotal | currency:"Ksh "}}</h2>
+            </div>
+            <div class="line-separator"></div>
+            <div class="cart-checkout-btn">
+                <button class="checkout-btn" type="button" (click)="checkOut()">
+                    <span class="material-icons" title="checkout">payment</span>
+                    Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
